@@ -12,11 +12,17 @@ Download comics from https://www.omgbeaupeep.com
 // main.go
 package main
 
-import "scraper/scraper"
-
-const ComicRoute = "/Avatar_The_Last_Airbender/001/"
+import (
+ "os"
+ "scraper/scraper"
+)
 
 func main() { 
+  ComicRoute := "/Avatar_The_Last_Airbender/001/"
+  if len(os.Args) == 2 {
+    ComicRoute = os.Args[1]
+  }
+
   scraper.DownloadComic(ComicRoute)
 }
 ```
@@ -33,3 +39,5 @@ Image downloaded: /comics/mangas/Avatar The Last Airbender/001 - Avatar The Last
 Image downloaded: /comics/mangas/Avatar The Last Airbender/001 - Avatar The Last Airbender - The Promise Part 1 (2012)/read-avatar-the-last-airbender-comics-online-free-004.jpg
 Image downloaded: /comics/mangas/Avatar The Last Airbender/001 - Avatar The Last Airbender - The Promise Part 1 (2012)/read-avatar-the-last-airbender-comics-online-free-005.jpg
 ```
+
+You can also just pass the data as a command-line argumment, for example: `go run main.go /Avatar_The_Last_Airbender/001/`.
