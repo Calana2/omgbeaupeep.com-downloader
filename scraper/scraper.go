@@ -79,7 +79,7 @@ func DownloadComic(route string) {
 				break
 			} else {
 				fmt.Println("Error visiting the page: ", err)
-		                fmt.Println("Retrying...")
+		    fmt.Println("Retrying...")
 				time.Sleep(1)
 				continue
 			}
