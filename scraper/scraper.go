@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly"
 )
 
@@ -51,10 +53,10 @@ func DownloadComic(route string) {
 		if !strings.Contains(imgSrc, "https://www.omgbeaupeep.com/") {
 			filename := filepath.Base(imgSrc)
 			imagePath := filepath.Join(outputPath, filename)
-      if _,err := os.Stat(imagePath); err == nil {
-			fmt.Println("Image exists:", imgSrc)
-       return
-      }
+			if _, err := os.Stat(imagePath); err == nil {
+				fmt.Println("Image exists:", imgSrc)
+				return
+			}
 			err := downloadImage(imgSrc, imagePath)
 			if err != nil {
 				fmt.Println("Error downloading the image:", err)
@@ -79,11 +81,44 @@ func DownloadComic(route string) {
 				break
 			} else {
 				fmt.Println("Error visiting the page: ", err)
-		    fmt.Println("Retrying...")
+				fmt.Println("Retrying...")
 				time.Sleep(1)
 				continue
 			}
 		}
 		index++
+	}
+}
+
+func DownloadAllChapters(comic string) {
+	// Create output directory
+	outputPath := filepath.Join("output", comic)
+	if _, err := os.Stat(outputPath); os.IsNotExist(err) {
+		fmt.Printf("Creating directory: ./%s/\n", outputPath)
+		err = os.MkdirAll(outputPath, os.ModePerm)
+		if err != nil {
+			fmt.Printf("Error creating the dir: %v\n", err)
+			return
+		}
+	}
+	// Colly events
+	c := colly.NewCollector(colly.AllowedDomains("www.omgbeaupeep.com"))
+	c.AllowURLRevisit = true
+	c.OnHTML("select.change-chapter", func(e *colly.HTMLElement) {
+		e.DOM.Children().Each(func(_index int, option *goquery.Selection) {
+			issue, exists := option.Attr("value")
+			if exists {
+				DownloadComic(comic + "/" + issue)
+			} else {
+				fmt.Print("Warning: <option> doesn't have \"value\" attribute")
+			}
+		})
+	})
+	// Actions
+	fmt.Println("Starting task: Download " + comic + " " + "https://www.omgbeaupeep.com/comics" + comic)
+	err := c.Visit("https://www.omgbeaupeep.com/comics" + comic)
+	if err != nil {
+		fmt.Println("Error visiting the page: ", err)
+		os.Exit(1)
 	}
 }
