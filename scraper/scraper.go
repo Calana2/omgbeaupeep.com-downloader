@@ -10,7 +10,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly"
 )
 
@@ -104,15 +103,13 @@ func DownloadAllChapters(comic string) {
 	// Colly events
 	c := colly.NewCollector(colly.AllowedDomains("www.omgbeaupeep.com"))
 	c.AllowURLRevisit = true
-	c.OnHTML("select.change-chapter", func(e *colly.HTMLElement) {
-		e.DOM.Children().Each(func(_index int, option *goquery.Selection) {
-			issue, exists := option.Attr("value")
-			if exists {
-				DownloadComic(comic + "/" + issue)
-			} else {
-				fmt.Print("Warning: <option> doesn't have \"value\" attribute")
-			}
-		})
+	c.OnHTML("select.change-chapter option[value]", func(e *colly.HTMLElement) {
+		issue := e.Attr("value")
+		if issue != "" {
+			DownloadComic(comic + "/" + issue)
+		} else {
+			fmt.Print("Warning: <option> doesn't have \"value\" attribute")
+		}
 	})
 	// Actions
 	fmt.Println("Starting task: Download " + comic + " " + "https://www.omgbeaupeep.com/comics" + comic)
