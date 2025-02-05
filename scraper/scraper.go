@@ -9,9 +9,20 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
 	"github.com/gocolly/colly"
 )
+
+
+// ANSI COLORS
+var Reset = "\033[0m" 
+var Red = "\033[31m" 
+var Green = "\033[32m" 
+var Yellow = "\033[33m" 
+var Blue = "\033[34m" 
+var Magenta = "\033[35m" 
+var Cyan = "\033[36m" 
+var Gray = "\033[37m" 
+var White = "\033[97m"
 
 func downloadImage(url string, outputPath string) error {
 	// Download the image
@@ -37,10 +48,10 @@ func DownloadComic(route string) {
 	// Create output directory
 	outputPath := filepath.Join("output", route)
 	if _, err := os.Stat(outputPath); os.IsNotExist(err) {
-		fmt.Printf("Creating directory: ./%s/\n", outputPath)
+		fmt.Printf(" Creating directory: ./%s/\n", outputPath)
 		err = os.MkdirAll(outputPath, os.ModePerm)
 		if err != nil {
-			fmt.Printf("Error creating the dir: %v\n", err)
+			fmt.Printf(Red + " Error creating the dir: %v\n" + Reset, err)
 			return
 		}
 	}
@@ -53,22 +64,26 @@ func DownloadComic(route string) {
 			filename := filepath.Base(imgSrc)
 			imagePath := filepath.Join(outputPath, filename)
 			if _, err := os.Stat(imagePath); err == nil {
-				fmt.Println("Image exists:", imgSrc)
+				fmt.Println(" Image exists:", imgSrc)
 				return
 			}
 			err := downloadImage(imgSrc, imagePath)
 			if err != nil {
-				fmt.Println("Error downloading the image:", err)
+				fmt.Println(Red + " Error downloading the image: " + Reset, err)
 			} else {
-				fmt.Println("Image downloaded:", imgSrc)
+				fmt.Println(Green + " Image downloaded:" + Reset, imgSrc)
 			}
 		}
 	})
+	// CLI output
+  fmt.Println()
+  fmt.Println("Downloading Issue:")
+	fmt.Println(Green + " " + route + Reset)
+  fmt.Println()
 	// Actions
-	fmt.Println("Starting task: Download " + route)
 	err := c.Visit("https://www.omgbeaupeep.com/comics" + route)
 	if err != nil {
-		fmt.Println("Error visiting the page: ", err)
+		fmt.Println(Red + "Error visiting the page: " + Reset, err)
 		os.Exit(1)
 	}
 	index := 2
@@ -76,10 +91,11 @@ func DownloadComic(route string) {
 		err := c.Visit("https://www.omgbeaupeep.com/comics" + route + "/" + strconv.Itoa(index))
 		if err != nil {
 			if err.Error() == "Not Found" {
-				fmt.Println("Task completed.")
+				fmt.Println(Green + "Issue downloaded successfully.")
+				fmt.Println()
 				break
 			} else {
-				fmt.Println("Error visiting the page: ", err)
+				fmt.Println(Red + "Error visiting the page: " + Reset, err)
 				fmt.Println("Retrying...")
 				time.Sleep(1)
 				continue
@@ -96,7 +112,7 @@ func DownloadAllChapters(comic string) {
 		fmt.Printf("Creating directory: ./%s/\n", outputPath)
 		err = os.MkdirAll(outputPath, os.ModePerm)
 		if err != nil {
-			fmt.Printf("Error creating the dir: %v\n", err)
+			fmt.Printf(Red + "Error creating the dir:" + Reset + "%v\n", err)
 			return
 		}
 	}
@@ -108,14 +124,22 @@ func DownloadAllChapters(comic string) {
 		if issue != "" {
 			DownloadComic(comic + "/" + issue)
 		} else {
-			fmt.Print("Warning: <option> doesn't have \"value\" attribute")
+      fmt.Print(Yellow + " Warning:" + Reset + " <option> doesn't have \"value\" attribute")
 		}
 	})
-	// Actions
-	fmt.Println("Starting task: Download " + comic + " " + "https://www.omgbeaupeep.com/comics" + comic)
+	// CLI output
+  fmt.Println()
+  fmt.Println("Downloading Comic:")
+	fmt.Println(Green + " " + comic + Reset)
+  fmt.Println()
+  // Actions
 	err := c.Visit("https://www.omgbeaupeep.com/comics" + comic)
 	if err != nil {
-		fmt.Println("Error visiting the page: ", err)
+		fmt.Println(Red + " Error visiting the page: " + Reset, err)
 		os.Exit(1)
 	}
+}
+
+func ComicToPDF(comic string) {
+
 }
