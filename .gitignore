@@ -26,3 +26,5 @@ go.work.sum
 
 /output
 .direnv
+# Added by goreleaser init:
+dist/
