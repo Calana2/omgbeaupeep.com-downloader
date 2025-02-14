@@ -15,7 +15,9 @@ import (
 	"github.com/jung-kurt/gofpdf"
 )
 
-// ANSI COLORS
+// +------------------+
+// | Global Variables |
+// +------------------+
 var Reset = "\033[0m" 
 var Red = "\033[31m" 
 var Green = "\033[32m" 
@@ -27,6 +29,9 @@ var Gray = "\033[37m"
 var White = "\033[97m"
 
 
+// +------------------+
+// | Public Functions |
+// +------------------+
 func DownloadComic(route string, toPDF bool) {
 	// Create output directory
 	outputPath := filepath.Join("output", route)
@@ -128,6 +133,22 @@ func DownloadAllChapters(comic string, toPDF bool) {
 	}
 }
 
+func GetComicList() (list []string, err error) {
+	c := colly.NewCollector(colly.AllowedDomains("www.omgbeaupeep.com"))
+  c.OnHTML("select.change-manga option[value]", func(e *colly.HTMLElement) {
+   list = append(list, e.Text + " (https://www.omgbeaupeep.com/comics/" + e.Attr("value") + ")")
+  })
+  err = c.Visit("https://www.omgbeaupeep.com/comics")
+  if err != nil {
+   return nil,err
+  }
+ return list,nil
+}
+
+
+// +-------------------+
+// | Private functions |
+// +-------------------+
 func downloadImage(url string, outputPath string) error {
 	// Download the image
 	response, err := http.Get("https://www.omgbeaupeep.com" + url)

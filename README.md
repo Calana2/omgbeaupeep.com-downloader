@@ -1,21 +1,37 @@
 # omgbeaupeep.com-downloader
 Download comics from https://www.omgbeaupeep.com
 
+![beau-peep-logo](https://github.com/user-attachments/assets/77f159a4-4cfb-486f-be6b-0aeac57803d4)
+
 ## How to use
-1. Find the Comic Book and the Issue in the link.
+1. #### Get a valid issue URL and add it as an argument
 
-![test1](https://github.com/user-attachments/assets/bffb32ea-083f-4383-9fbb-ed147c3097fc)
+&nbsp; `go run main.go <issueURL>`
 
-2. Pass the data as an argument and run:
-``` bash
-> go run main.go /Avatar_The_Last_Airbender/001/
-Creating directory: ./output/Avatar_The_Last_Airbender/001/
-Starting task: Download /Avatar_The_Last_Airbender/001/
-Image downloaded: /comics/mangas/Avatar The Last Airbender/001 - Avatar The Last Airbender - The Promise Part 1 (2012)/read-avatar-the-last-airbender-comics-online-free-001.jpg
-Image downloaded: /comics/mangas/Avatar The Last Airbender/001 - Avatar The Last Airbender - The Promise Part 1 (2012)/read-avatar-the-last-airbender-comics-online-free-002.jpg
-Image downloaded: /comics/mangas/Avatar The Last Airbender/001 - Avatar The Last Airbender - The Promise Part 1 (2012)/read-avatar-the-last-airbender-comics-online-free-003.jpg
+&nbsp; Example: `go run main.go https://www.omgbeaupeep.com/comics/Adventurers_(1986)/01.001.01/`
 
-``` 
+<h2></h2>
 
-- The files will be saved in the 'output' directory automatically
+2. #### Download all the issues of a comic
 
+&nbsp; `go run main.go <comicURL>`
+
+&nbsp; Example: `go run main.go https://www.omgbeaupeep.com/comics/Adventurers_(1986)/`
+
+<h2></h2>
+
+3. #### Convert images to PDF:
+ 
+&nbsp;  `go run main.go --pdf <issueURL|comicURL>`
+
+&nbsp; Example: `go run main.go --pdf https://www.omgbeaupeep.com/comics/Adventurers_(1986)/`
+
+4. #### List all comics:
+
+&nbsp;  `go run main.go --list-comics`
+
+
+## Notes
+- The files will be saved in the 'output' directory automatically.
+- If the URL contains characters at the end such as parentheses, which can be misinterpreted by the terminal emulator it is recommended to end it with '/' or enclose it in single or double quotes.
+- If you don't have a Go compiler you can use Nix or one of the released binaries.
