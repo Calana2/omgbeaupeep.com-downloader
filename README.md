@@ -3,35 +3,63 @@ Download comics from https://www.omgbeaupeep.com
 
 ![beau-peep-logo](https://github.com/user-attachments/assets/77f159a4-4cfb-486f-be6b-0aeac57803d4)
 
+## How to install
+
+### Linux
+ ``` bash
+  git clone https://github.com/Calana2/omgbeaupeep.com-downloader
+  cd omgbeaupeep.com-downloader
+  go build -o omgb main.go && sudo cp omgb /usr/bin/omgb
+```
+
+### Windows
+ ``` cmd
+  :: As administrator
+  git clone https://github.com/Calana2/omgbeaupeep.com-downloader
+  cd omgbeaupeep.com-downloader
+  go build -o omgb.exe main.go
+  mkdir "%ProgramFiles"\omgb
+  copy omgb.exe "%ProgramFiles%"\omgb
+  setx PATH "%PATH%;%ProgramFiles%\omgb"
+```
+
 ## How to use
-1. #### Get a valid issue URL and add it as an argument
 
-&nbsp; `go run main.go <issueURL>`
+- #### List all comics:
 
-&nbsp; Example: `go run main.go https://www.omgbeaupeep.com/comics/Adventurers_(1986)/01.001.01/`
-
-<h2></h2>
-
-2. #### Download all the issues of a comic
-
-&nbsp; `go run main.go <comicURL>`
-
-&nbsp; Example: `go run main.go https://www.omgbeaupeep.com/comics/Adventurers_(1986)/`
+&nbsp;  `omgb --list-comics`
 
 <h2></h2>
 
-3. #### Convert images to PDF:
+- #### List all issues of a comic:
+
+&nbsp;  `omgb --list-issues <comicURL>`
+
+<h2></h2>
+
+- #### Download an issue
+
+&nbsp; `omgb <issueURL>`
+
+&nbsp; Example: `omgb https://www.omgbeaupeep.com/comics/Adventurers_(1986)/01.001.01/`
+
+<h2></h2>
+
+- #### Download all the issues of a comic
+
+&nbsp; `omgb <comicURL>`
+
+&nbsp; Example: `omgb https://www.omgbeaupeep.com/comics/Adventurers_(1986)/`
+
+<h2></h2>
+
+- #### Convert images to PDF:
  
-&nbsp;  `go run main.go --pdf <issueURL|comicURL>`
+&nbsp;  `omgb --pdf <issueURL|comicURL>`
 
-&nbsp; Example: `go run main.go --pdf https://www.omgbeaupeep.com/comics/Adventurers_(1986)/`
-
-4. #### List all comics:
-
-&nbsp;  `go run main.go --list-comics`
+&nbsp; Example: `omgb --pdf https://www.omgbeaupeep.com/comics/Adventurers_(1986)/`
 
 
 ## Notes
 - The files will be saved in the 'output' directory automatically.
-- If the URL contains characters at the end such as parentheses, which can be misinterpreted by the terminal emulator it is recommended to end it with '/' or enclose it in single or double quotes.
 - If you don't have a Go compiler you can use Nix or one of the released binaries.
