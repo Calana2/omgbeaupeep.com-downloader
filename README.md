@@ -9,7 +9,7 @@ Download comics from https://www.omgbeaupeep.com
  ``` bash
   git clone https://github.com/Calana2/omgbeaupeep.com-downloader
   cd omgbeaupeep.com-downloader
-  go build -o omgb main.go && sudo cp omgb /usr/bin/omgb
+  go build -o omg-dl main.go && sudo cp omgb /usr/bin/omg-dl
 ```
 
 ### Windows
@@ -17,47 +17,47 @@ Download comics from https://www.omgbeaupeep.com
   :: As administrator
   git clone https://github.com/Calana2/omgbeaupeep.com-downloader
   cd omgbeaupeep.com-downloader
-  go build -o omgb.exe main.go
-  mkdir "%ProgramFiles"\omgb
-  copy omgb.exe "%ProgramFiles%"\omgb
-  setx PATH "%PATH%;%ProgramFiles%\omgb"
+  go build -o omg-dl.exe main.go
+  mkdir "%ProgramFiles"\omg-dl
+  copy omg-dl.exe "%ProgramFiles%"\omgb
+  setx PATH "%PATH%;%ProgramFiles%\omg-dl"
 ```
 
 ## How to use
 
 - #### List all comics:
 
-&nbsp;  `omgb --list-comics`
+&nbsp;  `omg-dl --list-comics`
 
 <h2></h2>
 
 - #### List all issues of a comic:
 
-&nbsp;  `omgb --list-issues <comicURL>`
+&nbsp;  `omg-dl --list-issues <comicURL>`
 
 <h2></h2>
 
 - #### Download an issue
 
-&nbsp; `omgb <issueURL>`
+&nbsp; `omg-dl <issueURL>`
 
-&nbsp; Example: `omgb https://www.omgbeaupeep.com/comics/Adventurers_(1986)/01.001.01/`
+&nbsp; Example: `omg-dl https://www.omgbeaupeep.com/comics/Adventurers_(1986)/01.001.01/`
 
 <h2></h2>
 
 - #### Download all the issues of a comic
 
-&nbsp; `omgb <comicURL>`
+&nbsp; `omg-dl <comicURL>`
 
-&nbsp; Example: `omgb https://www.omgbeaupeep.com/comics/Adventurers_(1986)/`
+&nbsp; Example: `omg-dl https://www.omgbeaupeep.com/comics/Adventurers_(1986)/`
 
 <h2></h2>
 
 - #### Convert images to PDF:
  
-&nbsp;  `omgb --pdf <issueURL|comicURL>`
+&nbsp;  `omg-dl --pdf <issueURL|comicURL>`
 
-&nbsp; Example: `omgb --pdf https://www.omgbeaupeep.com/comics/Adventurers_(1986)/`
+&nbsp; Example: `omg-dl --pdf https://www.omgbeaupeep.com/comics/Adventurers_(1986)/`
 
 
 ## Notes
