@@ -9,7 +9,7 @@ Download comics from https://www.omgbeaupeep.com
  ``` bash
   git clone https://github.com/Calana2/omgbeaupeep.com-downloader
   cd omgbeaupeep.com-downloader
-  go build -o omg-dl main.go && sudo cp omgb /usr/bin/omg-dl
+  go build -o omg-dl main.go && sudo cp omg-dl /usr/bin/omg-dl
 ```
 
 ### Windows
@@ -19,7 +19,7 @@ Download comics from https://www.omgbeaupeep.com
   cd omgbeaupeep.com-downloader
   go build -o omg-dl.exe main.go
   mkdir "%ProgramFiles"\omg-dl
-  copy omg-dl.exe "%ProgramFiles%"\omgb
+  copy omg-dl.exe "%ProgramFiles%"\omg-dl
   setx PATH "%PATH%;%ProgramFiles%\omg-dl"
 ```
 
