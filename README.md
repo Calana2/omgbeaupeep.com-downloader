@@ -1,4 +1,4 @@
-### `The site has changed to https://www.popsensei.com/request-a-comic-book-or-manga-omgbp/ and apparently offers the comics via email now, making this useless.` 
+### `The site has changed to https://www.popsensei.com/request-a-comic-book-or-manga-omgbp/ so this repo is now under development.` 
 
 # omgbeaupeep.com-downloader
 Download comics from https://www.omgbeaupeep.com
