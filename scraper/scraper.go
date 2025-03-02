@@ -31,9 +31,13 @@ var White = "\033[97m"
 // +------------------+
 // | Public Functions |
 // +------------------+
-func DownloadComic(route string, toPDF bool) {
+
+// TODO
+func DownloadComic(URL string, toPDF bool) {
 	// Create output directory
-	outputPath := filepath.Join("output", route)
+  subdomain := strings.Split(strings.Split(URL,"//")[1],"/")[0]
+  os.Exit(0)
+	outputPath := filepath.Join("output",URL)
 	if _, err := os.Stat(outputPath); os.IsNotExist(err) {
 		fmt.Printf(" Creating directory: ./%s/\n", outputPath)
 		err = os.MkdirAll(outputPath, os.ModePerm)
@@ -43,11 +47,11 @@ func DownloadComic(route string, toPDF bool) {
 		}
 	}
 	// Colly events
-	c := colly.NewCollector(colly.AllowedDomains("www.omgbeaupeep.com"))
+	c := colly.NewCollector(colly.AllowedDomains(subdomain))
 	c.AllowURLRevisit = true
 	c.OnHTML("img", func(e *colly.HTMLElement) {
 		imgSrc := e.Attr("src")
-		if !strings.Contains(imgSrc, "https://www.omgbeaupeep.com/") {
+		if strings.Contains(imgSrc, "/comics/") {
 			filename := filepath.Base(imgSrc)
 			imagePath := filepath.Join(outputPath, filename)
 			if _, err := os.Stat(imagePath); err == nil {
@@ -61,22 +65,21 @@ func DownloadComic(route string, toPDF bool) {
 				fmt.Println(Green+" Image downloaded:"+Reset, imgSrc)
 			}
 		}
-
 	})
 	// CLI output
 	fmt.Println()
 	fmt.Println("Downloading Issue:")
-	fmt.Println(Green + " " + route + Reset)
+	fmt.Println(Green + " " + URL + Reset)
 	fmt.Println()
 	// Actions
-	err := c.Visit("https://www.omgbeaupeep.com/comics" + route)
+	err := c.Visit("https://www.omgbeaupeep.com/comics" + URL)
 	if err != nil {
 		fmt.Println(Red+"Error visiting the page: "+Reset, err)
 		os.Exit(1)
 	}
 	index := 2
 	for {
-		err := c.Visit("https://www.omgbeaupeep.com/comics" + route + "/" + strconv.Itoa(index))
+		err := c.Visit(URL + "/" + strconv.Itoa(index))
 		if err != nil {
 			if err.Error() == "Not Found" {
 				fmt.Println(Green + " Issue downloaded successfully." + Reset)
@@ -97,6 +100,7 @@ func DownloadComic(route string, toPDF bool) {
 	}
 }
 
+// TODO
 func DownloadAllChapters(comic string, toPDF bool) {
 	// Create output directory
 	outputPath := filepath.Join("output", comic)
@@ -140,11 +144,11 @@ func DownloadAllChapters(comic string, toPDF bool) {
 }
 
 func GetComicList() (list []string, err error) {
-	c := colly.NewCollector(colly.AllowedDomains("www.omgbeaupeep.com"))
-	c.OnHTML("select.change-manga option[value]", func(e *colly.HTMLElement) {
-		list = append(list, e.Text+" (https://www.omgbeaupeep.com/comics/"+e.Attr("value")+")")
+	c := colly.NewCollector(colly.AllowedDomains("www.popsensei.com"))
+	c.OnHTML("ul.wp-block-list li", func(e *colly.HTMLElement) {
+    list = append(list, fmt.Sprintf("%-60s %s\n",e.Text,e.ChildAttr("a","href")))
 	})
-	err = c.Visit("https://www.omgbeaupeep.com/comics")
+	err = c.Visit("https://www.popsensei.com/request-a-comic-book-or-manga-omgbp")
 	if err != nil {
 		return nil, err
 	}
@@ -152,19 +156,11 @@ func GetComicList() (list []string, err error) {
 }
 
 func GetIssueList(comicURL string) (list []string, err error) {
-	var firstSelect bool = true
-	c := colly.NewCollector(colly.AllowedDomains("www.omgbeaupeep.com"))
+  domain := strings.Split(comicURL,"//")[1]
+  c := colly.NewCollector(colly.AllowedDomains(domain[:len(domain)-1]))
 
-	c.OnHTML("select.change-chapter", func(e *colly.HTMLElement) {
-		if !firstSelect {
-			return
-		}
-		e.ForEach("option", func(_ int, el *colly.HTMLElement) {
-			value := el.Attr("value")
-			name := strings.ReplaceAll(el.Text[1:], "\t", "")
-			list = append(list, name+" ("+comicURL+value+")")
-		})
-		firstSelect = false
+	c.OnHTML("ul.wp-block-list li", func(e *colly.HTMLElement) {
+    list = append(list, fmt.Sprintf("- %-60s %s\n",e.Text,e.ChildAttr("a","href")))
 	})
 	err = c.Visit(comicURL)
 	if err != nil {

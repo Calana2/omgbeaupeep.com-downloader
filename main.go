@@ -40,6 +40,7 @@ func main() {
      fmt.Println("Error getting the names of the comics: ",err)
      os.Exit(1)
    }
+   fmt.Println()
    for idx,r := range results {
     fmt.Printf("%d - %s\n",idx,r)
    }
@@ -52,6 +53,7 @@ func main() {
      fmt.Println("Error getting the names of the issues: ",err)
      os.Exit(1)
    }
+   fmt.Println()
    for _,r := range results {
     fmt.Printf("%s\n",r)
    }
@@ -59,14 +61,12 @@ func main() {
   }
 
 // Download
-	var ComicRoute = strings.TrimPrefix(flag.Arg(0),"https://www.omgbeaupeep.com/comics")
+	var ComicRoute = strings.TrimPrefix(flag.Arg(0)," ")
   ComicRoute = strings.TrimSuffix(ComicRoute,"/")
 	switch strings.Count(ComicRoute, "/") {
-	case 2:
-		scraper.DownloadComic(ComicRoute, *pdfFlag)
 	case 1:
 		scraper.DownloadAllChapters(ComicRoute, *pdfFlag)
 	default:
-		fmt.Printf("Invalid usage")
+		scraper.DownloadComic(ComicRoute, *pdfFlag)
 	}
 }
