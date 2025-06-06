@@ -27,8 +27,8 @@ func main() {
 
 	flag.Parse()
 	if *helpFlag || (flag.NArg() != 1 && !*listComicsFlag) {
-		fmt.Println("A tool to download comics from https://www.omgbeaupeep.com\n")
-		fmt.Println("Usage: omgb [OPTIONS] [comicURL|issueURL]\n")
+		fmt.Println("A tool to download comics from https://www.popsensei.com/request-a-comic-book/\n")
+		fmt.Println("Usage: popscrap [OPTIONS] [comicURL|issueURL]\n")
 		fmt.Println("Options:")
 		fmt.Println("-h, --help  Print help")
 		fmt.Println("-lc, --list-comics  List all available comics")
